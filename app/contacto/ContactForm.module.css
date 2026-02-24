@@ -1,0 +1,121 @@
+.formContainer {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-8);
+    background-color: var(--color-bg-secondary);
+    border-radius: 8px;
+    box-shadow: var(--shadow-md);
+}
+
+/* Bloque estilo CIEM arriba del form */
+.infoBox {
+    max-width: 800px;
+    margin: 0 auto var(--space-8) auto;
+    padding: var(--space-4) var(--space-8);
+    background-color: var(--color-bg-secondary);
+    border-left: 4px solid var(--color-primary);
+    border-radius: 4px;
+    box-shadow: var(--shadow-md);
+}
+
+.infoBox h3 {
+    margin-top: 0;
+    color: var(--color-primary);
+}
+
+.infoBox ul {
+    padding-left: var(--space-4);
+    color: var(--color-text-secondary);
+}
+
+.infoBox li {
+    margin-bottom: var(--space-1);
+}
+
+.formSection {
+    margin-bottom: var(--space-8);
+}
+
+.formSection h2 {
+    font-size: 1.25rem;
+    border-bottom: 2px solid var(--color-border);
+    padding-bottom: var(--space-2);
+    margin-bottom: var(--space-4);
+}
+
+/* Grid layout for rows like CIEM */
+.formRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+}
+
+/* Mobile responsiveness for the grid */
+@media (max-width: 600px) {
+    .formRow {
+        grid-template-columns: 1fr;
+    }
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.formGroupFull {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--space-4);
+}
+
+.formGroup label,
+.formGroupFull label {
+    font-weight: 500;
+    margin-bottom: var(--space-2);
+    color: var(--color-text-secondary);
+}
+
+.formGroup input,
+.formGroup select,
+.formGroupFull input,
+.formGroupFull textarea,
+.formGroupFull select {
+    width: 100%;
+}
+
+.formGroupFull textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.submitButton {
+    width: 100%;
+    font-size: 1.125rem;
+    padding: 1rem;
+    margin-top: var(--space-4);
+    border-radius: 4px;
+}
+
+.contactInfo {
+    max-width: 800px;
+    margin: var(--space-8) auto 0 auto;
+    text-align: left;
+}
+
+.contactInfo h3 {
+    color: var(--color-base-darker);
+    font-size: 1.125rem;
+    margin-bottom: var(--space-2);
+}
+
+.contactInfo ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.contactInfo li {
+    margin-bottom: var(--space-2);
+    color: var(--color-text-secondary);
+}

@@ -1,0 +1,40 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: var(--color-bg-secondary);
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logoContainer {
+    display: flex;
+    align-items: center;
+}
+
+.navLinks {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.navLinks a {
+    font-weight: 500;
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+
+/* La transición y color hover ya están manejadas en globals.css,
+   pero añadimos un sutil background de hover aquí para más interactividad */
+.navLinks a:hover {
+    background-color: rgba(140, 82, 255, 0.1);
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--color-primary);
+}
