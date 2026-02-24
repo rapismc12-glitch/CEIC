@@ -14,10 +14,33 @@ const areasDeInteres = {
 export default function Contacto() {
     const [situacionAcademica, setSituacionAcademica] = useState("");
     const [areaSeleccionada, setAreaSeleccionada] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        alert("Aplicación enviada con éxito.");
+        setIsSubmitting(true);
+        const form = e.currentTarget;
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch("https://formsubmit.co/ajax/saul95668@gmail.com", {
+                method: "POST",
+                body: formData
+            });
+
+            if (response.ok) {
+                alert("Aplicación enviada con éxito. Nos pondremos en contacto pronto.");
+                form.reset();
+                setSituacionAcademica("");
+                setAreaSeleccionada("");
+            } else {
+                alert("Hubo un error al enviar la aplicación. Por favor, inténtalo de nuevo directamente a nuestro correo.");
+            }
+        } catch (error) {
+            alert("Error de conexión. Inténtalo más tarde.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -53,29 +76,32 @@ export default function Contacto() {
             {/* Formulario contenedor principal */}
             <div className={styles.formContainer}>
                 <form className="contactForm" onSubmit={handleSubmit}>
+                    <input type="hidden" name="_subject" value="Nueva aplicación al CEIC" />
+                    <input type="hidden" name="_captcha" value="false" />
+                    <input type="hidden" name="_template" value="table" />
 
                     <div className={styles.formSection}>
                         <h2>Sección 1: Información General</h2>
-                        {/* Grid row estilo CIEM */}
+                        {/* Grid row */}
                         <div className={styles.formRow}>
                             <div className={styles.formGroup}>
                                 <label>Nombre completo *</label>
-                                <input type="text" required />
+                                <input type="text" name="Nombre" required />
                             </div>
                             <div className={styles.formGroup}>
                                 <label>Correo electrónico *</label>
-                                <input type="email" required />
+                                <input type="email" name="Correo" required />
                             </div>
                         </div>
 
                         <div className={styles.formRow}>
                             <div className={styles.formGroup}>
                                 <label>Número de contacto (Opcional)</label>
-                                <input type="tel" />
+                                <input type="tel" name="Telefono" />
                             </div>
                             <div className={styles.formGroup}>
                                 <label>Ciudad / País *</label>
-                                <input type="text" required />
+                                <input type="text" name="Ubicacion" required />
                             </div>
                         </div>
                     </div>
@@ -85,6 +111,7 @@ export default function Contacto() {
                         <div className={styles.formGroupFull}>
                             <label>Situación académica *</label>
                             <select
+                                name="Situacion_Academica"
                                 required
                                 value={situacionAcademica}
                                 onChange={(e) => setSituacionAcademica(e.target.value)}
@@ -101,11 +128,11 @@ export default function Contacto() {
                             <div className={styles.formRow}>
                                 <div className={styles.formGroup}>
                                     <label>Universidad *</label>
-                                    <input type="text" required />
+                                    <input type="text" name="Universidad" required />
                                 </div>
                                 <div className={styles.formGroup}>
                                     <label>Semestre *</label>
-                                    <input type="text" required />
+                                    <input type="text" name="Semestre" required />
                                 </div>
                             </div>
                         )}
@@ -113,7 +140,7 @@ export default function Contacto() {
                         {(situacionAcademica === 'Universitario titulado' || situacionAcademica === 'Posgrado') && (
                             <div className={styles.formGroupFull}>
                                 <label>Año de egreso *</label>
-                                <input type="number" required />
+                                <input type="number" name="Anio_Egreso" required />
                             </div>
                         )}
                     </div>
@@ -123,6 +150,7 @@ export default function Contacto() {
                         <div className={styles.formGroupFull}>
                             <label>¿En qué área deseas aplicar? *</label>
                             <select
+                                name="Area_Interes"
                                 required
                                 value={areaSeleccionada}
                                 onChange={(e) => setAreaSeleccionada(e.target.value)}
@@ -144,14 +172,14 @@ export default function Contacto() {
                         <h2>Sección 4: Motivación</h2>
                         <div className={styles.formGroupFull}>
                             <label>Cuéntanos brevemente por qué deseas formar parte del CEIC *</label>
-                            <textarea required></textarea>
+                            <textarea name="Motivacion" required></textarea>
                         </div>
                     </div>
 
                     <div className={styles.formSection}>
                         <h2>Sección 5: Experiencia Relevante (Opcional)</h2>
                         <div className={styles.formGroupFull}>
-                            <textarea placeholder="Experiencia académica, proyectos, investigación o habilidades relevantes"></textarea>
+                            <textarea name="Experiencia" placeholder="Experiencia académica, proyectos, investigación o habilidades relevantes"></textarea>
                         </div>
                     </div>
 
@@ -159,15 +187,17 @@ export default function Contacto() {
                         <h2>Sección 6: Disponibilidad de Tiempo</h2>
                         <div className={styles.formGroupFull}>
                             <label>Horas disponibles por semana *</label>
-                            <input type="number" required min="1" />
+                            <input type="number" name="Horas_Disponibles" required min="1" />
                         </div>
                     </div>
 
-                    <button type="submit" className={styles.submitButton}>Enviar aplicación</button>
+                    <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
+                        {isSubmitting ? 'Enviando...' : 'Enviar aplicación'}
+                    </button>
                 </form>
             </div>
 
-            {/* Información de contacto estilo CIEM (abajo del form, a la izquierda) */}
+            {/* Información de contacto */}
             <div className={styles.contactInfo}>
                 <p style={{ marginBottom: 'var(--space-2)' }}>
                     Para dudas o información adicional puedes contactar a la dirección del centro:
