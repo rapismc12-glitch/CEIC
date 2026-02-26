@@ -130,16 +130,12 @@ export default function DashboardClient({ initialArticles }: { initialArticles: 
     return (
         <div className="center-column" style={{ width: '100%', maxWidth: '1280px', margin: '0 auto' }}>
 
-            <div className="dash-hero">
+            <div className="dash-hero" style={{ padding: '2rem' }}>
                 <div className="hero-glow"></div>
-                <div className="badge-secure">
+                <div className="badge-secure" style={{ marginBottom: 0 }}>
                     <ScanFace size={16} />
                     Sistema Central Activo
                 </div>
-                <h1 className="dash-hero-title">Inteligencia Operativa</h1>
-                <p className="dash-hero-desc">
-                    Despliega tus publicaciones aquí y permite que nuestros motores de IA estructuren, clasifiquen e indexen la información instantáneamente.
-                </p>
             </div>
 
             <div className="dashboard-grid">
