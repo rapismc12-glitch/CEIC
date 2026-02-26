@@ -1,14 +1,10 @@
 import { NextResponse } from 'next/server';
 import { put } from '@vercel/blob';
 import { sql } from '@vercel/postgres';
-import { generateText } from 'ai';
-import { openai } from '@ai-sdk/openai';
 import { verifyToken } from '@/lib/auth';
-import mammoth from 'mammoth';
-import PDFParser from 'pdf2json';
 
 export const runtime = 'nodejs';
-export const maxDuration = 60; // 60 seconds
+export const maxDuration = 60;
 
 export async function POST(req: Request) {
     try {
@@ -34,82 +30,35 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'No file provided' }, { status: 400 });
         }
 
-        const buffer = Buffer.from(await file.arrayBuffer());
         const fileName = (file as any).name || 'upload';
-        const fileType = file.type;
 
-        // 3. Extract Text
-        let extractedText = '';
-        if (fileType === 'application/pdf') {
-            extractedText = await new Promise((resolve, reject) => {
-                const pdfParser = new PDFParser(null, true);
-                pdfParser.on('pdfParser_dataError', (errData: any) => reject(errData.parserError));
-                pdfParser.on('pdfParser_dataReady', () => {
-                    resolve((pdfParser as any).getRawTextContent());
-                });
-                pdfParser.parseBuffer(buffer);
-            });
-        } else if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || fileName.endsWith('.docx')) {
-            const result = await mammoth.extractRawText({ buffer });
-            extractedText = result.value;
-        } else {
-            return NextResponse.json({ error: 'Unsupported file type. Only PDF and DOCX are allowed.' }, { status: 400 });
-        }
-
-        // Check if text extraction worked
-        if (!extractedText.trim()) {
-            return NextResponse.json({ error: 'Could not extract text from document' }, { status: 400 });
-        }
-
-        // 4. Generate metadata with AI via OpenAI
-        // Limit text to avoid huge token costs with large documents
-        const truncatedText = extractedText.substring(0, 8000);
-
-        const { text: jsonString } = await generateText({
-            model: openai('gpt-4o'),
-            system: `You are an assistant that analyzes academic or research documents and extracts key metadata.
-      You MUST respond EXACTLY with a JSON object, no markdown wrappers, no formatting, just the raw JSON containing the following fields: 
-      "Title" (string), "Abstract" (string - a short summary), "Tags" (string - comma separated keywords), "Type" (string - e.g., 'Article', 'Report', 'Research Paper').`,
-            prompt: `Please extract the requested metadata from the following document text:\n\n${truncatedText}`,
-        });
-
-        // 5. Parse JSON metadata
-        let metadata;
-        try {
-            const cleanJson = jsonString.replace(/```json/g, '').replace(/```/g, '').trim();
-            metadata = JSON.parse(cleanJson);
-        } catch (parseError) {
-            console.error('Failed to parse AI response as JSON:', jsonString);
-            return NextResponse.json({ error: 'AI parsing failed' }, { status: 500 });
-        }
-
-        // Fallback defaults if the model missed some properties
-        const title = metadata.Title || fileName;
-        const abstract = metadata.Abstract || 'No abstract generated';
-        const tags = metadata.Tags || 'Uncategorized';
-        const type = metadata.Type || 'Document';
-        const niche = formData.get('niche') || 'General'; // Assume client might send 'niche' via form data, fallback to General
-        const author = formData.get('author') || 'Unknown'; // Same for 'author'
+        // 3. Extract manual metadata
+        const title = (formData.get('title') as string) || fileName;
+        const abstract = (formData.get('abstract') as string) || 'Sin resumen proporcionado.';
+        const tags = (formData.get('tags') as string) || 'Documento';
+        const type = 'Documento';
+        const niche = (formData.get('niche') as string) || 'General';
+        const author = (formData.get('author') as string) || 'Unknown';
         const date = new Date().toISOString();
 
         // Create a URL-friendly slug
         const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') + '-' + Date.now().toString().slice(-4);
 
-        // 6. Upload file to Vercel Blob
+        // 4. Upload file to Vercel Blob (unmodified)
         const blob = await put(`articles/${fileName}`, file, {
             access: 'public',
         });
         const fileUrl = blob.url;
 
-        // 7. Insert data to Vercel Postgres
+        // 5. Insert data to Vercel Postgres
         await sql`
       INSERT INTO articles (slug, niche, title, date, author, abstract, tags, type, "fileUrl")
-      VALUES (${slug}, ${niche as string}, ${title}, ${date}, ${author as string}, ${abstract}, ${tags}, ${type}, ${fileUrl})
+      VALUES (${slug}, ${niche}, ${title}, ${date}, ${author}, ${abstract}, ${tags}, ${type}, ${fileUrl})
     `;
 
         return NextResponse.json({
             success: true,
-            article: { slug, title, abstract, tags, type, fileUrl, niche: niche as string }
+            article: { slug, title, abstract, tags, type, fileUrl, niche }
         }, { status: 200 });
 
     } catch (error) {

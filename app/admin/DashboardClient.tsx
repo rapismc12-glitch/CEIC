@@ -14,6 +14,11 @@ export default function DashboardClient({ initialArticles }: { initialArticles: 
     const [statusMessage, setStatusMessage] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
 
+    // Manual Metadata States
+    const [docTitle, setDocTitle] = useState('');
+    const [docAbstract, setDocAbstract] = useState('');
+    const [docTags, setDocTags] = useState('');
+
     // Niche Options
     const RESEARCH_LINES = [
         "Economía Global y Finanzas",
@@ -63,6 +68,9 @@ export default function DashboardClient({ initialArticles }: { initialArticles: 
         ];
         if (validTypes.includes(selectedFile.type) || selectedFile.name.endsWith('.docx') || selectedFile.name.endsWith('.pdf')) {
             setFile(selectedFile);
+            setDocTitle(selectedFile.name.replace(/\.[^/.]+$/, ""));
+            setDocAbstract('');
+            setDocTags('');
             setUploadStatus('idle');
             setStatusMessage('');
         } else {
@@ -80,6 +88,9 @@ export default function DashboardClient({ initialArticles }: { initialArticles: 
         const formData = new FormData();
         formData.append('file', file);
         formData.append('niche', researchLine);
+        formData.append('title', docTitle);
+        formData.append('abstract', docAbstract);
+        formData.append('tags', docTags);
 
         try {
             const res = await fetch('/api/upload', {
@@ -91,9 +102,12 @@ export default function DashboardClient({ initialArticles }: { initialArticles: 
             if (data.success && data.article) {
                 setArticles([data.article, ...articles]);
                 setFile(null);
+                setDocTitle('');
+                setDocAbstract('');
+                setDocTags('');
                 if (fileInputRef.current) fileInputRef.current.value = '';
                 setUploadStatus('success');
-                setStatusMessage('Indexación completada mágicamente.');
+                setStatusMessage('Documento subido correctamente a la nube.');
                 setTimeout(() => setUploadStatus('idle'), 5000);
             } else {
                 setUploadStatus('error');
@@ -167,23 +181,23 @@ export default function DashboardClient({ initialArticles }: { initialArticles: 
                             />
 
                             {file ? (
-                                <div className="center-column">
-                                    <div className="doc-ui-filled">
+                                <div className="center-column" style={{ width: '100%', maxWidth: '420px', padding: '1rem 0' }}>
+
+                                    {/* Document Icon Header */}
+                                    <div className="doc-ui-filled" style={{ height: '7rem', marginBottom: '1rem' }}>
                                         <div className="doc-header"></div>
-                                        <div className="doc-line-1"></div>
-                                        <div className="doc-line-2"></div>
-                                        <div className="doc-line-3"></div>
-                                        <div className="doc-icon-box">
-                                            <FileText size={24} />
+                                        <div className="center-column" style={{ height: '100%' }}>
+                                            <FileText size={32} color="#10b981" />
                                         </div>
                                     </div>
-                                    <p className="file-name">{file.name}</p>
-                                    <p className="file-size">{(file.size / 1024 / 1024).toFixed(2)} MB asignados</p>
+                                    <p className="file-name" style={{ marginBottom: '0.2rem' }}>{file.name}</p>
+                                    <p className="file-size" style={{ marginBottom: '1.5rem' }}>{(file.size / 1024 / 1024).toFixed(2)} MB asignados</p>
 
-                                    <div className="input-group" style={{ marginBottom: '1.5rem', width: '100%' }}>
+                                    {/* Manual Metadata Form */}
+                                    <div className="input-group" style={{ marginBottom: '1rem', width: '100%' }}>
                                         <select
                                             className="login-input"
-                                            style={{ paddingLeft: '1rem', backgroundColor: '#f8fafc', color: '#334155', border: '2px solid #e2e8f0' }}
+                                            style={{ paddingLeft: '1rem', backgroundColor: '#f8fafc', color: '#334155', border: '2px solid #e2e8f0', textAlign: 'left' }}
                                             value={researchLine}
                                             onChange={(e) => setResearchLine(e.target.value)}
                                             disabled={uploading}
@@ -194,11 +208,52 @@ export default function DashboardClient({ initialArticles }: { initialArticles: 
                                         </select>
                                     </div>
 
-                                    <button onClick={(e) => { e.stopPropagation(); handleUpload(); }} disabled={uploading} className="btn-process">
+                                    <div className="input-group" style={{ marginBottom: '1rem', width: '100%' }}>
+                                        <input
+                                            type="text"
+                                            className="login-input"
+                                            placeholder="Título Final (Obligatorio)"
+                                            value={docTitle}
+                                            onChange={(e) => setDocTitle(e.target.value)}
+                                            disabled={uploading}
+                                            required
+                                            style={{ backgroundColor: '#f8fafc', color: '#334155', border: '2px solid #e2e8f0', width: '100%', textAlign: 'left', paddingLeft: '1rem' }}
+                                        />
+                                    </div>
+
+                                    <div className="input-group" style={{ marginBottom: '1rem', width: '100%' }}>
+                                        <textarea
+                                            className="login-input"
+                                            placeholder="Resumen del documento..."
+                                            value={docAbstract}
+                                            onChange={(e) => setDocAbstract(e.target.value)}
+                                            disabled={uploading}
+                                            style={{ backgroundColor: '#f8fafc', color: '#334155', border: '2px solid #e2e8f0', width: '100%', textAlign: 'left', paddingLeft: '1rem', minHeight: '80px', resize: 'vertical' }}
+                                        />
+                                    </div>
+
+                                    <div className="input-group" style={{ marginBottom: '1.5rem', width: '100%' }}>
+                                        <input
+                                            type="text"
+                                            className="login-input"
+                                            placeholder="Etiquetas (ej. geopolítica, mexico, 2024)"
+                                            value={docTags}
+                                            onChange={(e) => setDocTags(e.target.value)}
+                                            disabled={uploading}
+                                            style={{ backgroundColor: '#f8fafc', color: '#334155', border: '2px solid #e2e8f0', width: '100%', textAlign: 'left', paddingLeft: '1rem' }}
+                                        />
+                                    </div>
+
+                                    {/* Action Buttons */}
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); if (docTitle.trim() === '') { alert('El título es obligatorio'); return; } handleUpload(); }}
+                                        disabled={uploading}
+                                        className="btn-process"
+                                    >
                                         {uploading ? (
-                                            <><Loader2 size={20} className="spin-icon" /> Analizando Estructura...</>
+                                            <><Loader2 size={20} className="spin-icon" /> Subiendo Documento...</>
                                         ) : (
-                                            <><Sparkles size={20} /> PROCESAR DOCUMENTO</>
+                                            <><UploadCloud size={20} /> ALMACENAR EN NUBE</>
                                         )}
                                     </button>
                                     <button onClick={(e) => { e.stopPropagation(); setFile(null); setUploadStatus('idle'); }} disabled={uploading} className="btn-discard">
