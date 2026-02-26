@@ -21,11 +21,11 @@ export default function DashboardClient({ initialArticles }: { initialArticles: 
 
     // Niche Options
     const RESEARCH_LINES = [
-        "Economía Global y Finanzas",
-        "Geopolítica y Seguridad Internacional",
-        "Gobernanza y Políticas Públicas",
-        "Medio Ambiente y Sustentabilidad",
-        "Tecnología e Innovación",
+        "Geopolítica contemporánea",
+        "Economía internacional",
+        "Cooperación y desarrollo internacional",
+        "Gobernanza global",
+        "Políticas públicas y seguridad internacional",
         "Documento Institucional"
     ];
     const [researchLine, setResearchLine] = useState(RESEARCH_LINES[0]);
