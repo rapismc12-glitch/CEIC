@@ -3,6 +3,7 @@ import { verifyToken } from '@/lib/auth';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import DashboardClient from './DashboardClient';
+import './admin.css';
 
 export default async function AdminPage() {
     const cookieStore = cookies();
@@ -20,10 +21,8 @@ export default async function AdminPage() {
     const articles = await getArticles();
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 p-4 sm:p-8 flex items-center justify-center">
-            <div className="max-w-[1400px] w-full mx-auto">
-                <DashboardClient initialArticles={articles} />
-            </div>
+        <div className="admin-dashboard-wrapper admin-font">
+            <DashboardClient initialArticles={articles} />
         </div>
     );
 }
