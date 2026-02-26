@@ -4,8 +4,8 @@ import { sql } from '@vercel/postgres';
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { verifyToken } from '@/lib/auth';
-const pdfParse = require('pdf-parse');
 import mammoth from 'mammoth';
+import PDFParser from 'pdf2json';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60; // 60 seconds
@@ -38,11 +38,17 @@ export async function POST(req: Request) {
         const fileName = (file as any).name || 'upload';
         const fileType = file.type;
 
-        // 3. Extract Text via pdf-parse or mammoth
+        // 3. Extract Text
         let extractedText = '';
         if (fileType === 'application/pdf') {
-            const pdfData = await pdfParse(buffer);
-            extractedText = pdfData.text;
+            extractedText = await new Promise((resolve, reject) => {
+                const pdfParser = new PDFParser(null, true);
+                pdfParser.on('pdfParser_dataError', (errData: any) => reject(errData.parserError));
+                pdfParser.on('pdfParser_dataReady', () => {
+                    resolve((pdfParser as any).getRawTextContent());
+                });
+                pdfParser.parseBuffer(buffer);
+            });
         } else if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || fileName.endsWith('.docx')) {
             const result = await mammoth.extractRawText({ buffer });
             extractedText = result.value;
