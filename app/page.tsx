@@ -1,7 +1,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { getArticles } from '@/lib/articles';
 
-export default function Home() {
+export default async function Home() {
+  const allArticles = await getArticles();
+  const recentArticles = allArticles.slice(0, 3);
+
   return (
     <>
       <div style={{ width: '100%', height: '300px', position: 'relative' }}>
@@ -92,6 +96,50 @@ export default function Home() {
               </div>
             </Link>
 
+          </div>
+        </section>
+
+        {/* Publicaciones Recientes */}
+        <section style={{ marginTop: 'var(--space-12)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 'var(--space-6)' }}>
+            <h2 style={{ margin: 0 }}>Publicaciones Recientes</h2>
+            {recentArticles.length > 0 && (
+              <Link href="/publicaciones" style={{ color: 'var(--color-primary)', fontWeight: 600, textDecoration: 'none', fontSize: '0.875rem' }}>
+                Ver todas →
+              </Link>
+            )}
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--space-6)' }}>
+            {recentArticles.length === 0 ? (
+              <div style={{ gridColumn: '1 / -1', padding: 'var(--space-8)', textAlign: 'center', backgroundColor: 'var(--color-bg-secondary)', borderRadius: '8px', border: '1px dashed var(--color-border)' }}>
+                <div style={{ fontSize: '2rem', marginBottom: 'var(--space-2)' }}>📚</div>
+                <h3 style={{ margin: '0 0 var(--space-2) 0', color: 'var(--color-primary)' }}>Próximamente</h3>
+                <p style={{ margin: 0, color: 'var(--color-text-secondary)' }}>Nuevas publicaciones y artículos de investigación estarán disponibles en este espacio.</p>
+              </div>
+            ) : (
+              recentArticles.map((article) => (
+                <div key={article.slug} className="hover-card" style={{ padding: 'var(--space-6)', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-2)' }}>
+                    <span style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.05em', color: 'var(--color-primary)', textTransform: 'uppercase' }}>
+                      {article.niche}
+                    </span>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
+                      {new Date(article.date).toLocaleDateString('es-ES', { month: 'short', year: 'numeric' })}
+                    </span>
+                  </div>
+                  <h3 style={{ margin: '0 0 var(--space-2) 0', fontSize: '1.25rem', lineHeight: 1.4 }}>
+                    {article.title}
+                  </h3>
+                  <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.875rem', flexGrow: 1, marginBottom: 'var(--space-4)', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    {article.abstract}
+                  </p>
+                  <a href={article.fileUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-primary)', textDecoration: 'none', marginTop: 'auto' }}>
+                    Leer Documento →
+                  </a>
+                </div>
+              ))
+            )}
           </div>
         </section>
 
