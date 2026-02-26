@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Lock, User, LayoutDashboard, ArrowRight, Loader2 } from 'lucide-react';
+import { Lock, User, Sparkles, ArrowRight, Loader2, ShieldCheck } from 'lucide-react';
 
 export default function LoginPage() {
     const [username, setUsername] = useState('');
@@ -26,94 +26,108 @@ export default function LoginPage() {
             if (res.ok) {
                 router.push('/admin');
             } else {
-                setError('Credenciales inválidas. Intente de nuevo.');
+                setError('Acceso denegado. Verifica las credenciales.');
             }
         } catch (err) {
-            setError('Error de conexión al servidor.');
+            setError('Error de conexión. Intente más tarde.');
         } finally {
             setIsLoading(false);
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 relative overflow-hidden">
-            {/* Background Decorations */}
-            <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-30 animate-blob"></div>
-            <div className="absolute top-[20%] right-[-10%] w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-30 animate-blob animation-delay-2000"></div>
-            <div className="absolute bottom-[-20%] left-[20%] w-96 h-96 bg-cyan-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-30 animate-blob animation-delay-4000"></div>
+        <div className="min-h-screen flex items-center justify-center bg-[#070b19] relative overflow-hidden font-sans">
 
-            <div className="relative z-10 w-full max-w-md px-6">
-                <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl">
+            {/* Ambient Background Glows */}
+            <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[120px] mix-blend-screen pointer-events-none"></div>
+            <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-indigo-500/10 rounded-full blur-[150px] mix-blend-screen pointer-events-none"></div>
 
-                    <div className="text-center mb-10">
-                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 to-cyan-400 shadow-lg text-white mb-6">
-                            <LayoutDashboard className="w-8 h-8" />
+            <div className="relative z-10 w-full max-w-[420px] px-6 animate-in fade-in zoom-in-95 duration-700 ease-out">
+                {/* Main Card */}
+                <div className="relative overflow-hidden rounded-[2.5rem] bg-white/[0.02] border border-white/[0.05] p-10 shadow-2xl backdrop-blur-2xl">
+
+                    {/* Inner subtle glow line on top edge */}
+                    <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-blue-400/30 to-transparent"></div>
+
+                    {/* Header */}
+                    <div className="text-center mb-10 mt-2">
+                        <div className="relative inline-flex mb-6 group">
+                            <div className="absolute inset-0 bg-blue-500 rounded-2xl blur-xl opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
+                            <div className="relative flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-b from-blue-400 to-indigo-600 shadow-inner border border-white/20 text-white">
+                                <Sparkles className="w-8 h-8 drop-shadow-md" />
+                            </div>
                         </div>
-                        <h1 className="text-3xl font-bold text-white tracking-tight">Portal CMS</h1>
-                        <p className="text-blue-200 mt-2 text-sm font-medium">Gestión Autenticada de Contenido</p>
+                        <h1 className="text-3xl font-extrabold text-white tracking-tight">Access Control</h1>
+                        <p className="text-blue-200/60 mt-2 text-sm font-medium">Panel Maestro de Vértice CMS</p>
                     </div>
 
                     <form onSubmit={handleLogin} className="space-y-6">
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-blue-100 mb-1.5 ml-1">Usuario</label>
-                                <div className="relative group">
-                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-blue-300 group-focus-within:text-white transition-colors">
-                                        <User className="w-5 h-5" />
-                                    </div>
-                                    <input
-                                        type="text"
-                                        required
-                                        className="block w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-blue-300/50 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:bg-white/10 transition-all font-medium"
-                                        placeholder="Nombre de usuario"
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
-                                    />
+                        <div className="space-y-5">
+                            {/* Username Input */}
+                            <div className="group relative">
+                                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-blue-200/40 group-focus-within:text-blue-400 transition-colors duration-300">
+                                    <User className="w-[18px] h-[18px]" />
                                 </div>
+                                <input
+                                    type="text"
+                                    required
+                                    className="block w-full pl-12 pr-4 py-4 bg-black/20 border border-white/5 rounded-2xl text-white placeholder-blue-200/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all duration-300 font-medium text-[15px]"
+                                    placeholder="Usuario"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                />
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-blue-100 mb-1.5 ml-1">Contraseña</label>
-                                <div className="relative group">
-                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-blue-300 group-focus-within:text-white transition-colors">
-                                        <Lock className="w-5 h-5" />
-                                    </div>
-                                    <input
-                                        type="password"
-                                        required
-                                        className="block w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-blue-300/50 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:bg-white/10 transition-all font-medium tracking-wide"
-                                        placeholder="••••••••••••"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                    />
+                            {/* Password Input */}
+                            <div className="group relative">
+                                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-blue-200/40 group-focus-within:text-blue-400 transition-colors duration-300">
+                                    <Lock className="w-[18px] h-[18px]" />
                                 </div>
+                                <input
+                                    type="password"
+                                    required
+                                    className="block w-full pl-12 pr-4 py-4 bg-black/20 border border-white/5 rounded-2xl text-white placeholder-blue-200/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all duration-300 font-medium tracking-wider text-[15px]"
+                                    placeholder="Contraseña"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
                             </div>
                         </div>
 
+                        {/* Error Message */}
                         {error && (
-                            <div className="bg-red-500/10 border border-red-500/50 text-red-200 text-sm py-3 px-4 rounded-xl flex items-start">
-                                <span className="block sm:inline">{error}</span>
+                            <div className="animate-in slide-in-from-top-2 fade-in duration-300 bg-red-500/10 border border-red-500/20 text-red-400 text-sm py-3 px-4 rounded-xl flex items-center justify-center">
+                                {error}
                             </div>
                         )}
 
+                        {/* Submit Button */}
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="group w-full flex items-center justify-center gap-2 py-3.5 px-4 border border-transparent rounded-xl shadow-lg text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-blue-500 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+                            className="relative w-full overflow-hidden rounded-2xl group mt-2"
                         >
-                            {isLoading ? (
-                                <Loader2 className="w-5 h-5 animate-spin" />
-                            ) : (
-                                <>
-                                    Ingresar al Sistema
-                                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                </>
-                            )}
+                            <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-600 to-indigo-600 opacity-90 group-hover:opacity-100 transition-opacity duration-300"></span>
+                            {/* Shine effect */}
+                            <span className="absolute top-0 -left-[100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-20deg] group-hover:left-[200%] transition-all duration-700 ease-out"></span>
+
+                            <div className="relative flex items-center justify-center gap-2 py-4 px-4 text-sm font-bold text-white tracking-wide">
+                                {isLoading ? (
+                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                ) : (
+                                    <>
+                                        Entrar al Panel
+                                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                                    </>
+                                )}
+                            </div>
                         </button>
                     </form>
 
-                    <div className="mt-8 text-center text-xs text-blue-300/60 font-medium">
-                        Protegido con encriptación JWT de grado militar
+                    {/* Footer Badge */}
+                    <div className="mt-10 flex items-center justify-center gap-2 text-xs text-blue-200/40 font-medium">
+                        <ShieldCheck className="w-4 h-4" />
+                        Conexión Encriptada
                     </div>
                 </div>
             </div>
