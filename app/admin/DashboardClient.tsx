@@ -13,6 +13,18 @@ export default function DashboardClient({ initialArticles }: { initialArticles: 
     const [uploadStatus, setUploadStatus] = useState<'idle' | 'success' | 'error'>('idle');
     const [statusMessage, setStatusMessage] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
+
+    // Niche Options
+    const RESEARCH_LINES = [
+        "Economía Global y Finanzas",
+        "Geopolítica y Seguridad Internacional",
+        "Gobernanza y Políticas Públicas",
+        "Medio Ambiente y Sustentabilidad",
+        "Tecnología e Innovación",
+        "Documento Institucional"
+    ];
+    const [researchLine, setResearchLine] = useState(RESEARCH_LINES[0]);
+
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const filteredArticles = articles.filter(a =>
@@ -67,6 +79,7 @@ export default function DashboardClient({ initialArticles }: { initialArticles: 
         setUploadStatus('idle');
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('niche', researchLine);
 
         try {
             const res = await fetch('/api/upload', {
@@ -171,9 +184,23 @@ export default function DashboardClient({ initialArticles }: { initialArticles: 
                                     <p className="file-name">{file.name}</p>
                                     <p className="file-size">{(file.size / 1024 / 1024).toFixed(2)} MB asignados</p>
 
+                                    <div className="input-group" style={{ marginBottom: '1.5rem', width: '100%' }}>
+                                        <select
+                                            className="login-input"
+                                            style={{ paddingLeft: '1rem', backgroundColor: '#f8fafc', color: '#334155', border: '2px solid #e2e8f0' }}
+                                            value={researchLine}
+                                            onChange={(e) => setResearchLine(e.target.value)}
+                                            disabled={uploading}
+                                        >
+                                            {RESEARCH_LINES.map(line => (
+                                                <option key={line} value={line}>{line}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+
                                     <button onClick={(e) => { e.stopPropagation(); handleUpload(); }} disabled={uploading} className="btn-process">
                                         {uploading ? (
-                                            <><Loader2 size={20} className="spin" /> Analizando Estructura...</>
+                                            <><Loader2 size={20} className="spin-icon" /> Analizando Estructura...</>
                                         ) : (
                                             <><Sparkles size={20} /> PROCESAR DOCUMENTO</>
                                         )}
@@ -243,7 +270,7 @@ export default function DashboardClient({ initialArticles }: { initialArticles: 
                                     <div key={article.slug} className="article-card">
                                         <div className="center-column" style={{ width: '100%' }}>
                                             <div className="article-meta">
-                                                <span className="article-type">{article.type}</span>
+                                                <span className="article-type">{article.niche}</span>
                                                 <span className="article-date">{new Date(article.date).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                                             </div>
                                             <h3 className="article-title">{article.title}</h3>

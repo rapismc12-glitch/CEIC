@@ -109,7 +109,7 @@ export async function POST(req: Request) {
 
         return NextResponse.json({
             success: true,
-            article: { slug, title, abstract, tags, type, fileUrl }
+            article: { slug, title, abstract, tags, type, fileUrl, niche: niche as string }
         }, { status: 200 });
 
     } catch (error) {
