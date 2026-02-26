@@ -20,9 +20,8 @@ export default async function AdminPage() {
     const articles = await getArticles();
 
     return (
-        <div className="min-h-screen bg-gray-50 p-8">
-            <div className="max-w-6xl mx-auto">
-                <h1 className="text-3xl font-bold text-gray-900 mb-8">Gestor de Contenidos</h1>
+        <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 p-4 sm:p-8 flex items-center justify-center">
+            <div className="max-w-[1400px] w-full mx-auto">
                 <DashboardClient initialArticles={articles} />
             </div>
         </div>

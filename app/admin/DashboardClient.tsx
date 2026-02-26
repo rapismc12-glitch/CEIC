@@ -115,7 +115,7 @@ export default function DashboardClient({ initialArticles }: { initialArticles: 
     };
 
     return (
-        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-6 duration-700 ease-out font-sans flex flex-col items-center max-w-7xl mx-auto w-full">
+        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-6 duration-700 ease-out font-sans flex flex-col items-center justify-center w-full">
 
             {/* Header / Hero - Centered and Dynamic Focus */}
             <div className="relative p-12 w-full rounded-[2.5rem] bg-gradient-to-b from-[#0a0f25] to-[#0d1430] overflow-hidden shadow-2xl border border-white/5 text-center flex flex-col items-center">
@@ -153,10 +153,10 @@ export default function DashboardClient({ initialArticles }: { initialArticles: 
 
                         <div
                             className={`flex-1 relative overflow-hidden group rounded-[2.5rem] border-2 border-dashed transition-all duration-500 ease-out ${isDragging
-                                    ? 'border-cyan-500 bg-cyan-50/50 scale-[1.02] shadow-inner'
-                                    : file
-                                        ? 'border-emerald-400 bg-emerald-50/40'
-                                        : 'border-slate-300 hover:border-cyan-400 hover:bg-slate-50'
+                                ? 'border-cyan-500 bg-cyan-50/50 scale-[1.02] shadow-inner'
+                                : file
+                                    ? 'border-emerald-400 bg-emerald-50/40'
+                                    : 'border-slate-300 hover:border-cyan-400 hover:bg-slate-50'
                                 } p-8 flex flex-col items-center justify-center text-center cursor-pointer min-h-[400px]`}
                             onDragOver={handleDragOver}
                             onDragLeave={handleDragLeave}
