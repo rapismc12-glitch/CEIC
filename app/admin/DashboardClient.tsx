@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { Article } from '@/lib/articles';
-import { Trash2, UploadCloud, FileText, Loader2, Sparkles, AlertCircle, ArrowUpRight, Search, FileUp, Database, CheckCircle2 } from 'lucide-react';
+import { Trash2, UploadCloud, FileText, Loader2, Sparkles, AlertCircle, ArrowUpRight, Search, FileUp, Database, CheckCircle2, ScanFace } from 'lucide-react';
 
 export default function DashboardClient({ initialArticles }: { initialArticles: Article[] }) {
     const [articles, setArticles] = useState<Article[]>(initialArticles);
@@ -115,57 +115,49 @@ export default function DashboardClient({ initialArticles }: { initialArticles: 
     };
 
     return (
-        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-6 duration-700 ease-out font-sans">
+        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-6 duration-700 ease-out font-sans flex flex-col items-center max-w-7xl mx-auto w-full">
 
-            {/* Header / Hero */}
-            <div className="relative p-8 rounded-[2rem] bg-gradient-to-br from-indigo-900 via-blue-900 to-slate-900 overflow-hidden shadow-2xl border border-white/10">
-                {/* Decorative Elements */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl pointer-events-none mix-blend-screen"></div>
-                <div className="absolute bottom-[-100px] left-[-50px] w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            {/* Header / Hero - Centered and Dynamic Focus */}
+            <div className="relative p-12 w-full rounded-[2.5rem] bg-gradient-to-b from-[#0a0f25] to-[#0d1430] overflow-hidden shadow-2xl border border-white/5 text-center flex flex-col items-center">
+                {/* Decorative Elements - Centered Glow */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/15 rounded-full blur-[120px] pointer-events-none mix-blend-screen animate-pulse"></div>
 
-                <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                    <div>
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/10 text-blue-200 text-xs font-semibold tracking-wider mb-4">
-                            <Sparkles className="w-3.5 h-3.5" />
-                            AI CONTENT MANAGER
-                        </div>
-                        <h1 className="text-4xl font-extrabold text-white tracking-tight mb-2">Centro de Operaciones</h1>
-                        <p className="text-blue-100/70 font-medium max-w-xl">
-                            Arrastra tus publicaciones y permite que la Inteligencia Artificial extraiga metadatos, resúmenes y etiquetas automáticamente.
-                        </p>
+                <div className="relative z-10 flex flex-col items-center gap-6 max-w-3xl">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-bold tracking-[0.2em] uppercase mb-2">
+                        <ScanFace className="w-4 h-4" />
+                        Sistema Central Activo
                     </div>
 
-                    <div className="flex bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-md items-center gap-4">
-                        <div className="p-3 bg-blue-500/20 rounded-xl text-blue-300">
-                            <Database className="w-6 h-6" />
-                        </div>
-                        <div>
-                            <p className="text-white text-2xl font-bold">{articles.length}</p>
-                            <p className="text-blue-200/60 text-xs font-medium uppercase tracking-wider">Archivos en Nube</p>
-                        </div>
-                    </div>
+                    <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-white tracking-tight mb-2 pb-2">
+                        Inteligencia Operativa
+                    </h1>
+
+                    <p className="text-blue-200/60 font-medium text-lg max-w-2xl px-4">
+                        Despliega tus publicaciones aquí y permite que nuestros motores de IA estructuren, clasifiquen e indexen la información instantáneamente.
+                    </p>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="w-full flex flex-col lg:flex-row gap-8">
 
-                {/* Left Column: Drag & Drop (Takes 1 column) */}
-                <div className="lg:col-span-1 space-y-6">
-                    <div className="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-200/60">
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600">
-                                <UploadCloud className="w-5 h-5" />
+                {/* Left Column: Drag & Drop (Expanded logic) */}
+                <div className="w-full lg:w-[45%] flex flex-col gap-6">
+                    <div className="bg-white rounded-[2rem] p-6 sm:p-8 md:p-10 shadow-xl shadow-slate-200/40 border border-slate-200/60 h-full flex flex-col">
+                        <div className="flex flex-col items-center text-center gap-3 mb-8">
+                            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-600 shadow-lg shadow-cyan-500/20 flex flex-col items-center justify-center text-white">
+                                <UploadCloud className="w-7 h-7" />
                             </div>
-                            <h2 className="text-lg font-bold text-slate-800">Indexador</h2>
+                            <h2 className="text-2xl font-black text-slate-800 tracking-tight">Zona de Extracción</h2>
+                            <p className="text-sm text-slate-500 font-medium">Deposite los archivos de investigación aquí</p>
                         </div>
 
                         <div
-                            className={`relative overflow-hidden group rounded-3xl border-2 border-dashed transition-all duration-300 ease-in-out ${isDragging
-                                ? 'border-indigo-500 bg-indigo-50/50 scale-[1.02]'
-                                : file
-                                    ? 'border-emerald-300 bg-emerald-50/30'
-                                    : 'border-slate-300 hover:border-indigo-400 hover:bg-slate-50'
-                                } p-8 flex flex-col items-center justify-center text-center cursor-pointer min-h-[300px]`}
+                            className={`flex-1 relative overflow-hidden group rounded-[2.5rem] border-2 border-dashed transition-all duration-500 ease-out ${isDragging
+                                    ? 'border-cyan-500 bg-cyan-50/50 scale-[1.02] shadow-inner'
+                                    : file
+                                        ? 'border-emerald-400 bg-emerald-50/40'
+                                        : 'border-slate-300 hover:border-cyan-400 hover:bg-slate-50'
+                                } p-8 flex flex-col items-center justify-center text-center cursor-pointer min-h-[400px]`}
                             onDragOver={handleDragOver}
                             onDragLeave={handleDragLeave}
                             onDrop={handleDrop}
@@ -180,90 +172,108 @@ export default function DashboardClient({ initialArticles }: { initialArticles: 
                             />
 
                             {file ? (
-                                <div className="flex flex-col items-center animate-in zoom-in-95 duration-200">
-                                    <div className="w-20 h-20 bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center mb-4">
-                                        <FileText className="w-10 h-10 text-indigo-500" />
+                                <div className="flex flex-col items-center animate-in zoom-in-95 duration-300 w-full max-w-xs mx-auto">
+                                    {/* Beautiful Document UI format */}
+                                    <div className="relative w-32 h-44 bg-white rounded-xl shadow-xl border border-slate-200 flex flex-col items-center justify-center mb-6 overflow-hidden transform group-hover:-translate-y-2 transition-transform duration-500">
+                                        <div className="absolute top-0 inset-x-0 h-3 bg-gradient-to-r from-emerald-400 to-teal-500"></div>
+                                        <div className="absolute top-6 left-4 w-12 h-2 bg-slate-100 rounded-full"></div>
+                                        <div className="absolute top-10 left-4 w-20 h-2 bg-slate-100 rounded-full"></div>
+                                        <div className="absolute top-14 left-4 w-16 h-2 bg-slate-100 rounded-full"></div>
+                                        <div className="absolute bottom-6 inset-x-6 h-12 bg-emerald-50 rounded-lg flex items-center justify-center border border-emerald-100/50">
+                                            <FileText className="w-6 h-6 text-emerald-500" />
+                                        </div>
                                     </div>
-                                    <p className="text-base font-bold text-slate-800 line-clamp-1 max-w-[200px]">{file.name}</p>
-                                    <p className="text-xs text-slate-500 mt-1 mb-8 font-medium">
+
+                                    <p className="text-lg font-bold text-slate-800 line-clamp-2 leading-tight mb-2 w-full">{file.name}</p>
+                                    <p className="text-sm text-slate-500 font-semibold bg-white px-3 py-1 rounded-full border border-slate-200 mb-8 inline-block shadow-sm">
                                         {(file.size / 1024 / 1024).toFixed(2)} MB asignados
                                     </p>
+
                                     <div className="flex flex-col gap-3 w-full">
                                         <button
                                             onClick={(e) => { e.stopPropagation(); handleUpload(); }}
                                             disabled={uploading}
-                                            className="relative overflow-hidden w-full px-4 py-3 text-sm font-bold text-white bg-indigo-600 rounded-xl shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 transition-all disabled:opacity-80 disabled:cursor-wait flex justify-center items-center gap-2 group/btn"
+                                            className="relative overflow-hidden w-full px-6 py-4 text-sm font-black text-white bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl shadow-lg shadow-emerald-500/20 hover:from-emerald-400 hover:to-teal-500 hover:-translate-y-0.5 transition-all disabled:opacity-80 disabled:cursor-wait flex justify-center items-center gap-2 group/btn"
                                         >
                                             {uploading ? (
                                                 <>
-                                                    <Loader2 className="w-4 h-4 animate-spin" />
-                                                    IA Trabajando...
+                                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                                    Analizando Estructura...
                                                 </>
                                             ) : (
                                                 <>
-                                                    <Sparkles className="w-4 h-4 text-indigo-200" />
-                                                    Escanear & Subir
-                                                    <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+                                                    <Sparkles className="w-5 h-5 text-emerald-100" />
+                                                    PROCESAR DOCUMENTO
                                                 </>
                                             )}
                                         </button>
                                         <button
                                             onClick={(e) => { e.stopPropagation(); setFile(null); setUploadStatus('idle'); }}
-                                            className="w-full px-4 py-3 text-sm font-semibold text-slate-600 hover:text-slate-900 bg-transparent hover:bg-slate-100 rounded-xl transition-colors"
+                                            className="w-full px-6 py-3 text-sm font-bold text-slate-400 hover:text-slate-800 bg-transparent hover:bg-slate-100 rounded-2xl transition-colors"
                                             disabled={uploading}
                                         >
-                                            Descartar
+                                            Descartar Selección
                                         </button>
                                     </div>
                                 </div>
                             ) : (
-                                <div className="flex flex-col items-center text-slate-400 group-hover:text-indigo-600 transition-colors">
-                                    <div className="w-20 h-20 rounded-full bg-slate-100 group-hover:bg-indigo-100 flex items-center justify-center mb-6 transition-colors shadow-inner">
-                                        <FileUp className="w-8 h-8 group-hover:-translate-y-1 transition-transform duration-300" />
+                                <div className="flex flex-col items-center text-slate-400 group-hover:text-cyan-600 transition-colors w-full">
+                                    {/* Empty Document Outline Template */}
+                                    <div className="relative w-32 h-44 bg-slate-50 rounded-xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center mb-8 group-hover:border-cyan-300 group-hover:bg-cyan-50/50 transition-colors duration-500 transform group-hover:scale-105 group-hover:-rotate-3">
+                                        <FileUp className="w-10 h-10 text-slate-300 group-hover:text-cyan-500 group-hover:-translate-y-2 transition-all duration-500" />
                                     </div>
-                                    <p className="text-base font-bold text-slate-700 group-hover:text-indigo-700 mb-2">
-                                        Sube un Documento
+                                    <p className="text-2xl font-black text-slate-800 group-hover:text-cyan-700 mb-2">
+                                        Sube un Archivo
                                     </p>
-                                    <p className="text-xs font-medium text-slate-500">Arrastra aquí o haz clic</p>
-                                    <div className="mt-6 flex gap-2">
-                                        <span className="bg-white border border-slate-200 text-slate-600 text-[10px] font-bold px-3 py-1 rounded-full shadow-sm">PDF</span>
-                                        <span className="bg-white border border-slate-200 text-slate-600 text-[10px] font-bold px-3 py-1 rounded-full shadow-sm">DOCX</span>
+                                    <p className="text-sm font-medium text-slate-500">Arrastra aquí o haz clic para explorar</p>
+                                    <div className="mt-8 flex gap-3">
+                                        <span className="bg-white border border-slate-200 text-slate-500 text-xs font-black tracking-widest px-4 py-1.5 rounded-full shadow-sm">PDF</span>
+                                        <span className="bg-white border border-slate-200 text-slate-500 text-xs font-black tracking-widest px-4 py-1.5 rounded-full shadow-sm">DOCX</span>
                                     </div>
                                 </div>
                             )}
                         </div>
 
                         {uploadStatus !== 'idle' && (
-                            <div className={`mt-4 p-4 rounded-2xl flex items-start gap-3 animate-in fade-in slide-in-from-top-4 ${uploadStatus === 'success' ? 'bg-emerald-50 border border-emerald-100 text-emerald-800' : 'bg-red-50 border border-red-100 text-red-800'
+                            <div className={`mt-6 p-4 rounded-2xl flex items-center justify-center text-center gap-3 animate-in fade-in slide-in-from-top-4 ${uploadStatus === 'success' ? 'bg-emerald-50 border border-emerald-100 text-emerald-800' : 'bg-red-50 border border-red-100 text-red-800'
                                 }`}>
                                 {uploadStatus === 'success' ? (
-                                    <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                                    <CheckCircle2 className="w-6 h-6 text-emerald-600 flex-shrink-0" />
                                 ) : (
-                                    <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
+                                    <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0" />
                                 )}
-                                <p className="text-sm font-medium">{statusMessage}</p>
+                                <p className="text-sm font-bold">{statusMessage}</p>
                             </div>
                         )}
                     </div>
                 </div>
 
-                {/* Right Column: Library (Takes 2 columns) */}
-                <div className="lg:col-span-2">
-                    <div className="bg-white rounded-[2rem] shadow-sm border border-slate-200/60 overflow-hidden flex flex-col h-[calc(100vh-[400px])] min-h-[600px]">
+                {/* Right Column: Library */}
+                <div className="w-full lg:w-[55%]">
+                    <div className="bg-white rounded-[2rem] shadow-xl shadow-slate-200/40 border border-slate-200/60 overflow-hidden flex flex-col h-full min-h-[600px] lg:min-h-[800px]">
 
-                        {/* Toolbar */}
-                        <div className="p-6 border-b border-slate-100 bg-slate-50/30 flex flex-col sm:flex-row justify-between items-center gap-4">
-                            <h2 className="text-lg font-bold text-slate-800 flex items-center gap-3">
-                                Biblioteca Privada
-                            </h2>
-                            <div className="relative w-full sm:w-72">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <Search className="w-4 h-4 text-slate-400" />
+                        {/* Toolbar Centered Layout */}
+                        <div className="p-8 border-b border-slate-100 bg-slate-50/50 flex flex-col items-center justify-center text-center gap-6 relative">
+                            <div className="absolute top-4 right-6 flex items-center gap-1.5 bg-white border border-slate-200 px-3 py-1 rounded-full shadow-sm">
+                                <Database className="w-3.5 h-3.5 text-cyan-500" />
+                                <span className="text-xs font-bold text-slate-600">{articles.length}</span>
+                            </div>
+
+                            <div className="flex flex-col items-center gap-2">
+                                <h2 className="text-2xl font-black text-slate-800 tracking-tight">
+                                    Base de Datos
+                                </h2>
+                                <p className="text-sm text-slate-500 font-medium">Búsqueda y gestión de los artículos indexados</p>
+                            </div>
+
+                            <div className="relative w-full max-w-md">
+                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <Search className="w-5 h-5 text-slate-400" />
                                 </div>
                                 <input
                                     type="text"
-                                    className="block w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-full text-sm font-medium text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-                                    placeholder="Buscar por título o etiqueta..."
+                                    className="block w-full pl-12 pr-4 py-3 bg-white border-2 border-slate-200 rounded-2xl text-sm font-bold text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500 transition-all text-center"
+                                    placeholder="Buscar por título o tag..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
@@ -271,68 +281,66 @@ export default function DashboardClient({ initialArticles }: { initialArticles: 
                         </div>
 
                         {/* List Area */}
-                        <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                        <div className="flex-1 overflow-y-auto p-6 lg:p-8 space-y-4 bg-slate-50/20">
                             {filteredArticles.length === 0 ? (
-                                <div className="h-full flex flex-col items-center justify-center text-slate-400 p-8">
-                                    <div className="p-6 bg-slate-50 rounded-full mb-4">
-                                        <Search className="w-8 h-8 text-slate-300" />
+                                <div className="h-full flex flex-col items-center justify-center text-slate-400 p-8 text-center">
+                                    <div className="p-8 bg-white shadow-sm border border-slate-100 rounded-[2rem] mb-6 transform rotate-3">
+                                        <Database className="w-12 h-12 text-slate-300" />
                                     </div>
-                                    <p className="text-lg font-bold text-slate-600">Ningún archivo coincide</p>
-                                    <p className="text-sm mt-1 text-slate-500 text-center">La base de datos está vacía o la búsqueda no arrojó resultados.</p>
+                                    <p className="text-xl font-black text-slate-600">Base de Datos Vacía</p>
+                                    <p className="text-md mt-2 text-slate-500 max-w-xs">Esperando ingresos. Usa la zona de extracción a la izquierda.</p>
                                 </div>
                             ) : (
                                 filteredArticles.map((article) => (
-                                    <div key={article.slug} className="group bg-white border border-slate-100 rounded-2xl p-5 hover:border-indigo-100 hover:shadow-md hover:shadow-indigo-500/5 transition-all duration-300 flex flex-col sm:flex-row gap-5 items-start sm:items-center">
+                                    <div key={article.slug} className="group bg-white border border-slate-200/80 rounded-[1.5rem] p-6 hover:border-cyan-300 hover:shadow-xl hover:shadow-cyan-500/10 transition-all duration-300 flex flex-col gap-5 items-center text-center">
 
-                                        {/* Icon */}
-                                        <div className="hidden sm:flex flex-shrink-0 w-12 h-12 bg-indigo-50/50 rounded-xl items-center justify-center group-hover:bg-indigo-100 transition-colors">
-                                            <FileText className="w-6 h-6 text-indigo-500" />
-                                        </div>
-
-                                        {/* Info */}
-                                        <div className="flex-1 min-w-0">
-                                            <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                                                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase bg-slate-100 text-slate-600">
+                                        {/* Info Centered */}
+                                        <div className="flex-1 min-w-0 flex flex-col items-center w-full">
+                                            <div className="flex flex-wrap justify-center items-center gap-2 mb-3">
+                                                <span className="px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase bg-cyan-50 text-cyan-600 border border-cyan-100">
                                                     {article.type}
                                                 </span>
-                                                <span className="text-[11px] font-medium text-slate-400">
-                                                    {new Date(article.date).toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' })}
+                                                <span className="px-3 py-1 rounded-full text-[11px] font-bold text-slate-500 bg-slate-50 border border-slate-100">
+                                                    {new Date(article.date).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
                                                 </span>
                                             </div>
-                                            <h3 className="text-base font-bold text-slate-800 line-clamp-1 mb-1 group-hover:text-indigo-700 transition-colors">
+
+                                            <h3 className="text-lg font-black text-slate-800 line-clamp-2 mb-2 group-hover:text-cyan-600 transition-colors w-full px-4 text-balance">
                                                 {article.title}
                                             </h3>
-                                            <p className="text-sm text-slate-500 line-clamp-1 border-l-2 border-slate-200 pl-2">
+
+                                            <p className="text-sm font-medium text-slate-500 line-clamp-2 max-w-md bg-slate-50 p-3 rounded-xl border border-slate-100 w-full mb-4 leading-relaxed">
                                                 {article.abstract}
                                             </p>
 
                                             {/* Tags */}
-                                            <div className="flex flex-wrap gap-1.5 mt-3">
-                                                {article.tags.split(',').slice(0, 4).map((tag, i) => (
-                                                    <span key={i} className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold bg-indigo-50 text-indigo-600">
+                                            <div className="flex flex-wrap justify-center gap-2 mt-auto w-full px-2">
+                                                {article.tags.split(',').slice(0, 5).map((tag, i) => (
+                                                    <span key={i} className="inline-flex items-center px-3 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200">
                                                         #{tag.trim()}
                                                     </span>
                                                 ))}
                                             </div>
                                         </div>
 
-                                        {/* Actions */}
-                                        <div className="flex sm:flex-col gap-2 w-full sm:w-auto mt-4 sm:mt-0 pt-4 sm:pt-0 border-t sm:border-0 border-slate-100 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+                                        {/* Actions Centered Bottom */}
+                                        <div className="flex justify-center items-center gap-3 w-full pt-5 border-t border-slate-100">
                                             <a
                                                 href={article.fileUrl}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-xl hover:bg-indigo-700 transition-colors shadow-sm"
+                                                className="flex-1 flex justify-center items-center gap-2 px-6 py-3 bg-cyan-600 text-white text-sm font-black rounded-xl hover:bg-cyan-700 transition-colors shadow-md shadow-cyan-600/20"
                                             >
-                                                Ver
-                                                <ArrowUpRight className="w-3.5 h-3.5" />
+                                                Acceder a Nube
+                                                <ArrowUpRight className="w-4 h-4" />
                                             </a>
                                             <button
                                                 onClick={() => handleDelete(article.slug, article.fileUrl)}
-                                                className="flex-none flex items-center justify-center px-4 py-2 bg-white border border-red-200 text-red-600 text-xs font-bold rounded-xl hover:bg-red-50 hover:border-red-300 transition-colors"
+                                                className="flex-none flex items-center justify-center px-6 py-3 bg-white border-2 border-slate-200 text-slate-500 text-sm font-bold rounded-xl hover:bg-red-50 hover:border-red-300 hover:text-red-500 transition-all"
                                                 title="Eliminar de BD y Storage"
                                             >
-                                                <Trash2 className="w-3.5 h-3.5" />
+                                                <Trash2 className="w-4 h-4 mr-2" />
+                                                Eliminar
                                             </button>
                                         </div>
                                     </div>
